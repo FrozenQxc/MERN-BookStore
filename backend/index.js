@@ -7,6 +7,14 @@ import cors from "cors";
 
 const app = express();
 
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type"],
+  })
+);
+
 app.use(express.json());
 
 app.get("/", (request, response) => {
@@ -15,20 +23,13 @@ app.get("/", (request, response) => {
 });
 
 app.use("/books", BookRouter);
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type"],
-  })
-);
 
 mongoose
   .connect(mongoDB)
   .then(() => {
-    console.log("connect o mongoDB");
+    console.log("connected to MongoDB");
     app.listen(PORT, () => {
-      console.log(`Сервер запушен. Порт : ${PORT}`);
+      console.log(`Server started. Port: ${PORT}`);
     });
   })
   .catch((error) => {
